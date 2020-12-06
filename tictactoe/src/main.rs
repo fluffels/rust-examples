@@ -1,15 +1,19 @@
 use std::io::stdin;
-mod tictactoe;
+use rand::random;
 
+mod tictactoe;
 use tictactoe::ai_move;
 use tictactoe::Board;
 use tictactoe::State;
 use tictactoe::Tile;
 
 fn main() {
-    let mut board = Board::new();
-    let player_tile = Tile::X;
+    let player_tile = if random() { Tile::X } else { Tile::O };
     let ai_tile = player_tile.opposite();
+    let mut board = Board::new();
+    if player_tile.o() {
+        board = ai_move(&board, ai_tile).unwrap();
+    }
     println!("{}", board);
     loop {
         println!("{}: ", &player_tile);
