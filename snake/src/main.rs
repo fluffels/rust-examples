@@ -1,28 +1,30 @@
 use raylib::prelude::*;
 
-struct Vec2<T> {
-    x: T,
-    y: T
-}
-
 struct State {
     dir: Vector2,
-    pos: Vector2
+    pos: Vector2,
+    segments: Vec::<Vector2>
 }
 
 impl State {
     pub fn new() -> Self {
-        Self {
+        let mut s = Self {
             dir: Vector2 { x: 1.0, y: 0.0 },
-            pos: Vector2 { x: 0.0, y: 0.0 }
+            pos: Vector2 { x: 0.0, y: 0.0 },
+            segments: Vec::new()
+        };
+        for _ in 0..3 {
+            s.segments.push(Vector2 { x: 0.0, y: 0.0 })
         }
+        return s;
     }
 }
 
 fn main() {
-    let screen_width = 640;
-    let screen_height = 480;
     let block_size = 30.0;
+    let block_count = 25.0;
+    let screen_width = block_size * block_count;
+    let screen_height = block_size * block_count;
     let velocity = 3.0;
     let max_x = screen_width as f32 - block_size;
     let max_y = screen_height as f32 - block_size;
@@ -30,7 +32,7 @@ fn main() {
     let min_y = 0.0;
 
     let (mut rl, thread) = raylib::init()
-        .size(screen_width, screen_height)
+        .size(screen_width as i32, screen_height as i32)
         .title("snek")
         .build();
     
@@ -55,22 +57,40 @@ fn main() {
         }
 
         let t = rl.get_frame_time();
-        dbg!(t);
+
+        let discretize = |n: f32| (n / block_size).floor() * block_size;
+        let to_square = |v: Vector2| Vector2 { x: discretize(v.x), y: discretize(v.y) };
+
+        let mut old_square = to_square(state.pos);
 
         state.pos.x += state.dir.x * block_size * velocity * t;
         state.pos.y += state.dir.y * block_size * velocity * t;
 
-        if state.pos.x < min_x { state.pos.x = min_x }
-        if state.pos.y < min_y { state.pos.y = min_y }
-        if state.pos.x > max_x { state.pos.x = max_x }
-        if state.pos.y > max_y { state.pos.y = max_y }
+        if state.pos.x < min_x { return }
+        if state.pos.y < min_y { return }
+        if state.pos.x > max_x { return }
+        if state.pos.y > max_y { return }
 
-        let screen_x = ((state.pos.x / block_size).floor() * block_size) as i32;
-        let screen_y = ((state.pos.y / block_size).floor() * block_size) as i32;
+        let new_square = to_square(state.pos);
+
+        if new_square != old_square {
+            for segment in &mut state.segments {
+                let temp = *segment;
+                *segment = old_square;
+                dbg!(*segment);
+                old_square = temp;
+            }
+        }
 
         let mut d = rl.begin_drawing(&thread);
-        
         d.clear_background(Color::BLACK);
-        d.draw_rectangle(screen_x, screen_y, block_size as i32, block_size as i32, Color::GREEN);
+        d.draw_rectangle(new_square.x as i32, new_square.y as i32, block_size as i32, block_size as i32, Color::GREEN);
+        for segment in &state.segments {
+            let x = (segment.x) as i32;
+            dbg!(x);
+            let y = (segment.y) as i32;
+            dbg!(y);
+            d.draw_rectangle(x, y, block_size as i32, block_size as i32, Color::GREEN);
+        }
     }
 }
