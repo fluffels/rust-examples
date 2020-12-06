@@ -1,6 +1,7 @@
 #![cfg(test)]
 
 use super::Board;
+use super::ai::ai_move;
 use super::State;
 use super::Tile;
 
@@ -78,4 +79,11 @@ fn test_undecided() {
     board.set(0, 2, Tile::X).unwrap();
     board.set(1, 2, Tile::X).unwrap();
     assert!(board.state() == State::Undecided);
+}
+
+#[test]
+fn test_ai() {
+    let mut board = Board::new();
+    board.set(1, 1, Tile::X).ok();
+    ai_move(&board, Tile::O).unwrap();
 }

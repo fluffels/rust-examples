@@ -21,7 +21,7 @@ impl Display for BoardError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Board {
     data: [Tile; 9]
 }

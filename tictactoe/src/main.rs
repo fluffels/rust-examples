@@ -1,6 +1,7 @@
 use std::io::stdin;
 mod tictactoe;
 
+use tictactoe::ai_move;
 use tictactoe::Board;
 use tictactoe::State;
 use tictactoe::Tile;
@@ -40,13 +41,13 @@ fn main() {
             }
         }
         println!("{}", board);
+        match ai_move(&board, turn.opposite()) {
+            Some(new_board) => board = new_board,
+            None => {}
+        }
+        println!("{}", board);
         match board.state() {
             State::Undecided => {
-                if turn.x() {
-                    turn = Tile::O;
-                } else {
-                    turn = Tile::X;
-                }
                 continue;
             }
             State::Draw => {
