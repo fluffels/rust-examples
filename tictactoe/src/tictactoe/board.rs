@@ -1,7 +1,9 @@
-use std::cmp::PartialEq;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
+
+use super::State;
+use super::Tile;
 
 #[derive(Clone, Copy, Debug)]
 pub enum BoardError {
@@ -17,46 +19,6 @@ impl Display for BoardError {
         };
         write!(f, "{}", error)
     }
-}
-
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum Tile {
-    EMPTY,
-    X,
-    O
-}
-
-impl Tile {
-    pub fn empty(&self) -> bool {
-        *self == Tile::EMPTY
-    }
-
-    pub fn x(&self) -> bool {
-        *self == Tile::X
-    }
-    
-    pub fn o(&self) -> bool {
-        *self == Tile::O
-    }
-}
-
-impl Display for Tile {
-    fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        let glyph = match self {
-            Self::EMPTY => "　",
-            Self::X => "❌",
-            Self::O => "⭕",
-        };
-        write!(f, "{}", glyph)
-    }
-}
-
-#[derive(Clone, Copy, PartialEq)]
-pub enum State {
-    Undecided,
-    Draw,
-    XWin,
-    OWin,
 }
 
 #[derive(Debug)]

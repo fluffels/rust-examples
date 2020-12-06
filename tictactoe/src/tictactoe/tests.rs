@@ -1,8 +1,8 @@
 #![cfg(test)]
 
-use super::board::Board;
-use super::board::State;
-use super::board::Tile;
+use super::Board;
+use super::State;
+use super::Tile;
 
 #[test]
 fn test_blank() {

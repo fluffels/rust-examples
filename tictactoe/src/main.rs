@@ -1,9 +1,9 @@
 use std::io::stdin;
 mod tictactoe;
 
-use tictactoe::board::Board;
-use tictactoe::board::State;
-use tictactoe::board::Tile;
+use tictactoe::Board;
+use tictactoe::State;
+use tictactoe::Tile;
 
 fn main() {
     let mut board = Board::new();
