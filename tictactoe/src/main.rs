@@ -8,10 +8,11 @@ use tictactoe::Tile;
 
 fn main() {
     let mut board = Board::new();
-    let mut turn = Tile::X;
+    let player_tile = Tile::X;
+    let ai_tile = player_tile.opposite();
     println!("{}", board);
     loop {
-        println!("{}: ", &turn);
+        println!("{}: ", &player_tile);
         let mut input = String::new();
         stdin().read_line(&mut input).unwrap();
         match input.find(" ") {
@@ -30,7 +31,7 @@ fn main() {
                         continue;
                     }
                 };
-                if board.set(x, y, turn).is_err() {
+                if board.set(x, y, player_tile).is_err() {
                     println!("invalid coords");
                     continue;
                 }
@@ -41,7 +42,7 @@ fn main() {
             }
         }
         println!("{}", board);
-        match ai_move(&board, turn.opposite()) {
+        match ai_move(&board, ai_tile) {
             Some(new_board) => board = new_board,
             None => {}
         }
