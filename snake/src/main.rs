@@ -77,7 +77,6 @@ fn main() {
             for segment in &mut state.segments {
                 let temp = *segment;
                 *segment = old_square;
-                dbg!(*segment);
                 old_square = temp;
             }
         }
@@ -87,9 +86,7 @@ fn main() {
         d.draw_rectangle(new_square.x as i32, new_square.y as i32, block_size as i32, block_size as i32, Color::GREEN);
         for segment in &state.segments {
             let x = (segment.x) as i32;
-            dbg!(x);
             let y = (segment.y) as i32;
-            dbg!(y);
             d.draw_rectangle(x, y, block_size as i32, block_size as i32, Color::GREEN);
         }
     }
